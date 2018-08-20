@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.6.RELEASE</version>
+        <relativePath/>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>redis</artifactId>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--
+            <dependency>
+                <groupId>com.ctrip.framework</groupId>
+                <artifactId>framework-bom</artifactId>
+                <version>2.13.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>4.3.17.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
+                <version>1.4.3.RELEASE</version>
+            </dependency>
+            -->
+            <dependency>
+                <groupId>com.ctrip.credis</groupId>
+                <artifactId>credis</artifactId>
+                <version>3.1.2</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring-webmvc</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ctrip.credis</groupId>
+            <artifactId>credis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <!--
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+                -->
+            </exclusions>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+        -->
+        <!--
+        <dependency>
+            <groupId>com.ctrip.credis</groupId>
+            <artifactId>credis</artifactId>
+            <version>2.6.9</version>
+        </dependency>
+        -->
+    </dependencies>
+
+</project>

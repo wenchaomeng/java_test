@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="info"  packages="com.ctrip.xpipe.utils.log">
+
+    <appenders>
+        <console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}][%p][%t][%c{1}]%m%n"/>
+        </console>
+
+        <RollingFile name="RollingFileInfo" fileName="java.log"
+                     filePattern="java-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}][%p][%t][%c{1}]%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="1024 MB"/>
+            </Policies>
+        </RollingFile>
+
+    </appenders>
+
+    <loggers>
+        <!--过滤掉spring和hibernate的一些无用的debug信息-->
+        <logger name="org.springframework" level="INFO"/>
+        <logger name="org.hibernate" level="INFO"/>
+        <logger name="io.netty" level="INFO"/>
+        <logger name="org.apache" level="INFO"/>
+
+        <root level="INFO">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileInfo"/>
+        </root>
+    </loggers>
+
+</configuration >

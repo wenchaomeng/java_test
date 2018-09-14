@@ -16,6 +16,7 @@
         <module>javabasic</module>
         <module>temp</module>
         <module>redis</module>
+        <module>advanced</module>
     </modules>
 
     <properties>

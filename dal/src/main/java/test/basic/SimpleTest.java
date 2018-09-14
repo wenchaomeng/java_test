@@ -14,7 +14,6 @@ public class SimpleTest {
 
     @Test
     public void testDate() {
-
 //        System.out.println(System.currentTimeMillis());
         System.out.println(new Date(1533621528000L));
 

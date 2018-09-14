@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javabasic.AbstractTest;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
@@ -14,6 +15,29 @@ import java.math.BigDecimal;
  */
 public class JsonTest extends AbstractTest {
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    @Test
+    public void testStringDesr() throws IOException {
+
+        String test = "\"nihaoma\"";
+//        String test = "\"test\\n\"";
+        String object = objectMapper.readValue(test, String.class);
+        logger.info("{}", object);
+    }
+
+    @Test
+    public void testStringSer() throws IOException {
+//        String test = "nihaoma\n";
+        String test = "\"t,e s\nt1}2345\"";
+        String object = objectMapper.writeValueAsString(test);
+        logger.info("{}", object);
+
+
+    }
+
+
+
     @Test
     public void test() throws JsonProcessingException {
 
@@ -21,11 +45,9 @@ public class JsonTest extends AbstractTest {
 
         Person person = new Person(1, bigNumber);
 
-        ObjectMapper objectMapper = new ObjectMapper();
 
         String s = objectMapper.writeValueAsString(person);
         logger.info("{}", s);
-
     }
 
 

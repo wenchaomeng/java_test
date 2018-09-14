@@ -8,7 +8,7 @@ package javabasic.subpackage;
 public class Child extends Parent {
 
     public String get() {
-        return "hello";
+        return "from child return string," + super.get();
     }
 
 }

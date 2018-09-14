@@ -1,9 +1,7 @@
 package test.basic.mysql;
 
 import com.mysql.jdbc.MySQLConnection;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.transaction.annotation.Transactional;
 import test.basic.CommonTask.BatchTask;
 
 import java.sql.*;
@@ -34,9 +32,20 @@ public class TestRawJbbcInsert extends AbstractMysqlTest {
         properties.setProperty("allowMultiQueries", "true");
     }
 
+    @Test
+    public void testGetConnectionTimeout() throws SQLException, ClassNotFoundException {
 
+        logger.error("[testGetConnectionTimeout][begin]");
+        try {
+            Connection connection = getConnection();
+            logger.info("[testGetConnectionTimeout][ end ]");
+        }catch (Exception e){
+            logger.error("[testGetConnectionTimeout][ end ]", e);
+        }
 
-        @Test
+    }
+
+    @Test
     public void testTinyInt() throws SQLException {
 
         PreparedStatement statement = connection.prepareStatement("select * from test");

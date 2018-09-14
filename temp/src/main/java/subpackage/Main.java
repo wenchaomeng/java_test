@@ -10,7 +10,6 @@ import javabasic.subpackage.Child;
 public class Main {
 
 
-
     public static void main(String []argc) {
 
         System.out.println("begin");

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wenchao.meng
@@ -20,7 +21,7 @@ public class CRedisTest {
 
     private ExecutorService executors = Executors.newCachedThreadPool();
 
-    private static CacheProvider provider = CacheFactory.GetProvider(System.getProperty("cluster", "FlightExchangeIntlClass"));
+    private static CacheProvider provider = CacheFactory.GetProvider(System.getProperty("cluster", "corptest"));
 
     @Test
     public void redisSetGet() throws Exception {
@@ -30,6 +31,8 @@ public class CRedisTest {
         provider.set(key, "TestValue");
         String value = provider.get(key);
         logger.info("{}", value);
+
+        TimeUnit.SECONDS.sleep(600);
     }
 
     public static void main(String[] argc) {

@@ -10,26 +10,26 @@ import java.util.List;
  */
 public class NoClassDefFoundErrorDueToStaticInitFailure {
 
-    public static void main(String args[]){
+    public static void main(String args[]) {
 
         List<User> users = new ArrayList<User>(2);
-
-        for(int i=0; i<2; i++){
-            try{
+        for (int i = 0; i < 2; i++) {
+            try {
                 users.add(new User(String.valueOf(i))); //will throw NoClassDefFoundError
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
     }
 
-    static class User{
+    static class User {
 
         private static String USER_ID = getUserId();
 
-        public User(String id){
+        public User(String id) {
             this.USER_ID = id;
         }
+
         private static String getUserId() {
             throw new RuntimeException("UserId Not found");
         }

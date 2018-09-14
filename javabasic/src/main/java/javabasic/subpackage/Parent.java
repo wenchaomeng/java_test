@@ -6,4 +6,9 @@ package javabasic.subpackage;
  *         Jul 26, 2018
  */
 public class Parent {
+
+    public Object get() {
+        return "from parent return object";
+    }
+
 }

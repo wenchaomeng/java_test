@@ -19,12 +19,18 @@ public abstract class AbstractDbTest extends AbstractTest {
 
     @Before
     public void beforeAbstractDbTest() throws SQLException, ClassNotFoundException {
-        connection = getConnection();
+        try {
+            connection = getConnection();
+        } catch (Exception e) {
+            logger.error("[error get connection]" + getUrl(), e);
+        }
     }
 
     @After
     public void afterAbstractDbTest() throws SQLException {
-        connection.close();
+        if (connection != null) {
+            connection.close();
+        }
     }
 
 
@@ -72,8 +78,8 @@ public abstract class AbstractDbTest extends AbstractTest {
             for (int i = 1; i <= columnCount; i++) {
                 sb.append(
                         resultSet.getMetaData().getColumnName(i)
-                        + "[" + simpleClassName(resultSet.getMetaData().getColumnClassName(i)) + "]"
-                        + ":" + resultSet.getObject(i));
+                                + "[" + simpleClassName(resultSet.getMetaData().getColumnClassName(i)) + "]"
+                                + ":" + resultSet.getObject(i));
 
                 sb.append(",");
             }
@@ -83,7 +89,7 @@ public abstract class AbstractDbTest extends AbstractTest {
 
     private static String simpleClassName(String columnClassName) {
 
-        if(columnClassName == null){
+        if (columnClassName == null) {
             return "--null--";
         }
 

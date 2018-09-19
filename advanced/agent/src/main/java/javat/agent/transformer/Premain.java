@@ -8,13 +8,15 @@ import java.lang.instrument.UnmodifiableClassException;
  *         <p>
  *         Sep 11, 2018
  */
-public class Premain {
+public class Premain extends AbstractMain {
 
     public static void premain(String agentArgs, Instrumentation inst)
             throws ClassNotFoundException, UnmodifiableClassException {
 
         System.out.println("begin premain");
-        inst.addTransformer(new Transformer());
+        inst.redefineClasses(createDefinition());
+        //inst.addTransformer(new Transformer());
         System.out.println(" end  premain");
     }
+
 }

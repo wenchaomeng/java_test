@@ -6,9 +6,7 @@ package javat.agent.transformer;
  * Sep 11, 2018
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.net.URL;
@@ -42,13 +40,15 @@ class Transformer implements ClassFileTransformer {
     public byte[] transform(ClassLoader l, String className, Class<?> c,
                             ProtectionDomain pd, byte[] b) throws IllegalClassFormatException {
 
+
+        System.out.println(className + ", clazz:" + c);
         if (!className.endsWith("TransClass")) {
             return null;
         }
 
-        URL resource = TransClass.class.getResource("TransClass.class");
         try {
-            return getBytesFromFile(resource.openStream());
+            InputStream ins = new FileInputStream(new File("TransClass.class"));
+            return getBytesFromFile(ins);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

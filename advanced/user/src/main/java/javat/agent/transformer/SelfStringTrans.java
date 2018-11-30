@@ -1,6 +1,5 @@
 package javat.agent.transformer;
 
-import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 
 import java.io.ByteArrayOutputStream;

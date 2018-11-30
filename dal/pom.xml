@@ -19,7 +19,7 @@
         <dal.version>1.14.10</dal.version>
         <dal.version>1.13.5</dal.version>
         -->
-        <dal.version>1.15.5</dal.version>
+        <dal.version>1.16.2</dal.version>
         <!--
         <datasource.version>1.13.0</datasource.version>
         -->
@@ -32,7 +32,7 @@
             <dependency>
                 <groupId>com.ctrip.framework</groupId>
                 <artifactId>framework-bom</artifactId>
-                <version>2.10.1</version>
+                <version>2.42.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

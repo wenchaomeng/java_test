@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wenchao.meng
@@ -25,15 +26,14 @@ public class MuteServer extends AbstractServerTest {
         InputStream inputStream = socket.getInputStream();
         OutputStream outputStream = socket.getOutputStream();
 
-        while (true) {
-
-//            int read = inputStream.read();
-//            if(read < 0){
-//                System.out.println("read <0 return" + read);
-//                return;
-//            }
-//            System.out.print((char)read);
+        logger.info("doWith sleep begin");
+        try {
+            TimeUnit.DAYS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        logger.info("doWith sleep end");
+
 
     }
 }

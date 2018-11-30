@@ -11,19 +11,18 @@ import java.net.Socket;
  *         <p>
  *         Jul 20, 2018
  */
-public class BrokenPipeTest extends AbstractTest {
+public class WriteFailTest extends AbstractTest {
 
     @Test
     public void test() throws IOException {
 
-        Socket socket = new Socket("10.2.58.242", 8081);
+        Socket socket = new Socket("127.0.0.1", 8888);
 
         while (true) {
-
-            sleep(2000);
             logger.info("[begin write]");
-            socket.getOutputStream().write("123".getBytes());
-
+            socket.getOutputStream().write(randomString(1024).getBytes());
+            logger.info("[ end  write]");
+            //java write fail hang!!!
         }
 
 

@@ -13,16 +13,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>tes.redis</groupId>
-            <artifactId>redis</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>test</groupId>
-            <artifactId>javabasic</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
 
     </dependencies>
 

@@ -19,6 +19,7 @@ public class PoolMysql extends AbstractMysqlTest {
     private int maxActive = 5;
     private int minIdle = 3;
 
+
     @Before
     public void beforePoolMysql() {
 
@@ -29,6 +30,33 @@ public class PoolMysql extends AbstractMysqlTest {
         p.setPassword(getPassword());
         setProperties(p);
     }
+
+    @Override
+    protected boolean createInitConnection() {
+        return false;
+    }
+
+    @Test
+    public void testPoolMaxRows() throws SQLException {
+
+        p.setInitialSize(1);
+        p.setConnectionProperties("maxRows=1");
+
+        DataSource datasource = new DataSource();
+        datasource.setPoolProperties(p);
+
+        for (int i = 0; i < 2; i++) {
+
+            try (Connection con = datasource.getConnection()) {
+                PreparedStatement statement = con.prepareStatement("select * from test");
+                ResultSet resultSet = statement.executeQuery();
+                printResultSet(resultSet);
+            }
+        }
+
+
+    }
+
 
     @Test
     public void testPoolFull() throws SQLException {
@@ -50,7 +78,7 @@ public class PoolMysql extends AbstractMysqlTest {
         p.setRemoveAbandoned(true);
         p.setRemoveAbandonedTimeout(removeAbandonedTimeout);
         p.setLogAbandoned(true);
-        p.setTimeBetweenEvictionRunsMillis(removeAbandonedTimeout/2);
+        p.setTimeBetweenEvictionRunsMillis(removeAbandonedTimeout / 2);
 
         DataSource datasource = new DataSource(p);
 
@@ -61,7 +89,7 @@ public class PoolMysql extends AbstractMysqlTest {
             PreparedStatement statement = connection.prepareStatement(String.format("select sleep(%d)", removeAbandonedTimeout * 12));
             statement.execute();
             connection.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("error", e);
         }
 

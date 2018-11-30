@@ -1,6 +1,7 @@
 package test.dal.mysql.unittest;
 
 
+import com.ctrip.platform.dal.dao.status.DalStatusManager;
 import org.junit.*;
 
 import static org.junit.Assert.*;
@@ -8,6 +9,7 @@ import static org.junit.Assert.*;
 import com.ctrip.platform.dal.dao.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import test.AbstractTest;
 import test.dal.mysql.pojo.ClusterTbl;
 import test.dal.mysql.pojo.ClusterTblDao;
 
@@ -37,6 +39,7 @@ public class DalUnitTest {
         DalClientFactory.warmUpConnections();
         client = DalClientFactory.getClient(DATA_BASE);
         dao = new ClusterTblDao();
+        DalStatusManager.getTimeoutMarkdown().setTimeoutThreshold(30);
     }
 
     @AfterClass
@@ -46,6 +49,25 @@ public class DalUnitTest {
 
     @Before
     public void setUp() throws Exception {
+
+
+    }
+
+    @Test
+    public void testTransaction() throws SQLException, InterruptedException {
+
+        client.execute(new DalCommand() {
+
+            @Override
+            public boolean execute(DalClient client) throws SQLException {
+
+                System.out.println(dao.count());
+                return false;
+
+            }
+        }, new DalHints());
+
+        TimeUnit.SECONDS.sleep(100);
     }
 
     private ClusterTbl createPojo(int index) {
@@ -149,6 +171,7 @@ public class DalUnitTest {
 
     @Test
     public void testQueryAll() throws Exception {
+
         List<ClusterTbl> list = dao.queryAll(new DalHints().allowPartial());
         logger.info("{}", list);
 
@@ -266,8 +289,16 @@ public class DalUnitTest {
         DalHints hints = new DalHints();
         List<ClusterTbl> daoPojos = dao.queryAll(new DalHints());
         changePojos(daoPojos);
-        int[] affected = dao.batchUpdate(hints, daoPojos);
-        assertArrayEquals(new int[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, affected);
+
+//        daoPojos.get(0).setClusterName(AbstractTest.randomString(1024));
+
+        try {
+            int[] affected = dao.batchUpdate(hints, daoPojos);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getErrorCode());
+
+        }
         verifyPojos(dao.queryAll(new DalHints()));
     }
 

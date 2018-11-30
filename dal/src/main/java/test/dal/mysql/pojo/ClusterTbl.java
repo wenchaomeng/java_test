@@ -166,4 +166,8 @@ public class ClusterTbl implements DalPojo {
         this.clusterAdminEmails = clusterAdminEmails;
     }
 
+
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
 }

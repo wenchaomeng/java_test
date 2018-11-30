@@ -3,6 +3,7 @@ package test.basic.CommonTask;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import test.AbstractTest;
 import test.basic.AbstractDbTest;
 
 import java.sql.*;
@@ -52,6 +53,7 @@ public class BatchTask extends AbstractTask {
 //            statement1.setString(1, "name:" + i);
             statement1.addBatch(String.format("insert into test(name) values('%s')", "testBatch1" + i));
         }
+
         statement1.executeBatch();
         ResultSet generatedKeys = statement1.getGeneratedKeys();
         AbstractDbTest.printResultSet(generatedKeys);

@@ -21,6 +21,24 @@ public class JedisTest {
     private int port = 6379;
     private ExecutorService executors = Executors.newCachedThreadPool();
 
+
+    @Test
+    public void testPool() throws InterruptedException {
+
+        final JedisPool jedisPool = new JedisPool(newPoolConfig(), this.host, this.port,
+                RAppSetting.getTimeout(), null, 0);
+
+        Jedis resource = jedisPool.getResource();
+
+        String value = resource.get("a");
+
+        resource.close();
+
+        TimeUnit.SECONDS.sleep(10000);
+
+    }
+
+
     @Test
     public void testJedis() throws InterruptedException {
 

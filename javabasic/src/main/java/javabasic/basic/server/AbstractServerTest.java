@@ -23,6 +23,8 @@ public abstract class AbstractServerTest extends AbstractSocketTest {
 
         ServerSocket ss = new ServerSocket(port, backlog);
 
+        logger.info("accept {}, {}", port, backlog);
+
         while (true) {
 
             Socket accept = ss.accept();

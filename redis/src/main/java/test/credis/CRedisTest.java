@@ -21,7 +21,15 @@ public class CRedisTest {
 
     private ExecutorService executors = Executors.newCachedThreadPool();
 
-    private static CacheProvider provider = CacheFactory.GetProvider(System.getProperty("cluster", "corptest"));
+    private static CacheProvider provider = CacheFactory.GetProvider(System.getProperty("cluster", "HotelProduct"));
+
+    @Test
+    public void test() {
+
+        String data = provider.get("GeoPlace_Data_1_EN_73");
+        System.out.println(data);
+    }
+
 
     @Test
     public void redisSetGet() throws Exception {

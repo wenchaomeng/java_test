@@ -5,6 +5,8 @@ import org.junit.Before;
 import test.AbstractTest;
 
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -20,10 +22,16 @@ public abstract class AbstractDbTest extends AbstractTest {
     @Before
     public void beforeAbstractDbTest() throws SQLException, ClassNotFoundException {
         try {
-            connection = getConnection();
+            if (createInitConnection()) {
+                connection = getConnection();
+            }
         } catch (Exception e) {
             logger.error("[error get connection]" + getUrl(), e);
         }
+    }
+
+    protected boolean createInitConnection() {
+        return true;
     }
 
     @After
@@ -76,6 +84,7 @@ public abstract class AbstractDbTest extends AbstractTest {
         while (resultSet.next()) {
             sb = new StringBuilder();
             for (int i = 1; i <= columnCount; i++) {
+
                 sb.append(
                         resultSet.getMetaData().getColumnName(i)
                                 + "[" + simpleClassName(resultSet.getMetaData().getColumnClassName(i)) + "]"

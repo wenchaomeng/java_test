@@ -2,6 +2,7 @@ package test.basic.mysql;
 
 import com.mysql.jdbc.MySQLConnection;
 import org.junit.Test;
+import test.basic.AbstractDbTest;
 import test.basic.CommonTask.BatchTask;
 
 import java.sql.*;
@@ -27,6 +28,7 @@ public class TestRawJbbcInsert extends AbstractMysqlTest {
         properties.setProperty("connectTimeout", "5000");
         properties.setProperty("socketTimeout", "5000");
         properties.setProperty("tinyInt1isBit", "false");
+        properties.setProperty("maxRows", "1");
 
         //
         properties.setProperty("allowMultiQueries", "true");
@@ -39,10 +41,9 @@ public class TestRawJbbcInsert extends AbstractMysqlTest {
         try {
             Connection connection = getConnection();
             logger.info("[testGetConnectionTimeout][ end ]");
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("[testGetConnectionTimeout][ end ]", e);
         }
-
     }
 
     @Test
@@ -50,7 +51,21 @@ public class TestRawJbbcInsert extends AbstractMysqlTest {
 
         PreparedStatement statement = connection.prepareStatement("select * from test");
         ResultSet resultSet = statement.executeQuery();
+        printResultSet(resultSet);
 
+        logger.info("-------query");
+        statement = connection.prepareStatement("select * from test");
+        resultSet = statement.executeQuery();
+        printResultSet(resultSet);
+
+        logger.info("--------update");
+        statement = connection.prepareStatement("update test set name = 'hello' where id = 1");
+        int i = statement.executeUpdate();
+
+
+        logger.info("-------query");
+        statement = connection.prepareStatement("select * from test");
+        resultSet = statement.executeQuery();
         printResultSet(resultSet);
 
     }
@@ -89,8 +104,65 @@ public class TestRawJbbcInsert extends AbstractMysqlTest {
     public void testBatchOrCombined() {
 
         new BatchTask(connection).run();
+    }
+
+    @Test
+    public void testDuplicateId() throws SQLException, ClassNotFoundException {
+
+        PreparedStatement statement1 = connection.prepareStatement(
+                " insert into test(id, name) values(?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+        for (int i = 0; i < 2; i++) {
+            statement1.setLong(1, 1);
+            statement1.setString(2, "name:" + i);
+            statement1.addBatch();
+        }
+
+        statement1.executeBatch();
+        ResultSet generatedKeys = statement1.getGeneratedKeys();
+        printResultSet(generatedKeys);
 
     }
+
+
+    @Test
+    public void testBatch() throws SQLException, ClassNotFoundException {
+
+        PreparedStatement statement1 = connection.prepareStatement(
+                " insert into test(name) values(?)", Statement.RETURN_GENERATED_KEYS);
+
+        for (int i = 0; i < 3; i++) {
+//            statement1.setString(1, "name:" + i);
+            statement1.addBatch(String.format("insert into test(name) values('%s')", "testBatch:" + i));
+        }
+
+        statement1.addBatch(String.format("insert into test(name) values('%s')", randomString(200)));
+
+        statement1.executeBatch();
+        ResultSet generatedKeys = statement1.getGeneratedKeys();
+        printResultSet(generatedKeys);
+
+    }
+
+
+    @Test
+    public void testCombined() throws SQLException, ClassNotFoundException {
+
+
+        PreparedStatement statement = connection.prepareStatement("delete from test where id =1 or id = 2 or id = 3");
+        statement.executeUpdate();
+
+        PreparedStatement statement1 = connection.prepareStatement(
+                " insert into test(id, name)  values(2, 'testCombined:1'), (5, 'testCombined:2')", Statement.RETURN_GENERATED_KEYS);
+
+//        PreparedStatement statement1 = connection.prepareStatement(
+//                " insert into test(id, name)  values(1, 'testCombined:1')",  Statement.RETURN_GENERATED_KEYS);
+
+        statement1.execute();
+        ResultSet generatedKeys = statement1.getGeneratedKeys();
+        printResultSet(generatedKeys);
+    }
+
 
     @Test
     public void testEmoji() throws SQLException, ClassNotFoundException {
@@ -202,20 +274,40 @@ public class TestRawJbbcInsert extends AbstractMysqlTest {
     }
 
     @Test
-    public void testSelectStatement() throws SQLException, ClassNotFoundException {
+    public void testSelectStatement() throws SQLException, ClassNotFoundException, InterruptedException {
 
 
-        CallableStatement statement = connection.prepareCall("select id,name from test where id > ?");
+        PreparedStatement statement = connection.prepareStatement(" select id,name from test where id > ? and name = ?");
+
         statement.setInt(1, 1);
+        statement.setString(2, "nihaoma");
 
         ResultSet resultSet = statement.executeQuery();
 
         while (resultSet.next()) {
-
             int id = resultSet.getInt(1);
             String name = resultSet.getString(2);
-
             logger.info("{}, {}", id, name);
+        }
+
+        TimeUnit.SECONDS.sleep(1);
+    }
+
+    @Test
+    public void testSelectStatement1() throws SQLException, ClassNotFoundException {
+
+
+        for (int i = 0; i < 100; i++) {
+
+            PreparedStatement statement = connection.prepareStatement(" select id,name from test where id > 10 and name = 'nihamma'");
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                logger.info("{}, {}", id, name);
+            }
         }
     }
 
